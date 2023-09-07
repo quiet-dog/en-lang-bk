@@ -12,7 +12,7 @@ func (w *WordRouter) InitWordRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 	wordRouter := Router.Group("word")
 	wordApi := api.ApiGroupApp.SystemApiGroup.WordApi
 	{
-		wordRouter.POST("create", wordApi.Create)
+		wordRouter.POST("create", wordApi.CreateWord)
 	}
 	return wordRouter
 }
