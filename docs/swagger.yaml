@@ -1,4 +1,47 @@
+definitions:
+  request.WordCreate:
+    properties:
+      category:
+        description: 归类ID
+        type: integer
+      content:
+        description: 原本单词
+        type: string
+      extend:
+        description: 扩展批注内容
+        type: string
+    required:
+    - category
+    - content
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /word/createWord:
+    post:
+      consumes:
+      - application/json
+      description: 创建词条
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: word
+        in: body
+        name: word
+        required: true
+        schema:
+          $ref: '#/definitions/request.WordCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"创建成功"}'
+          schema:
+            type: string
+      summary: 创建词条
+      tags:
+      - 词条
 swagger: "2.0"

@@ -1,3 +1,6 @@
 package system
 
-type ServiceGroup struct{}
+type ServiceGroup struct {
+	WordService
+	ArticleService
+}
