@@ -10,15 +10,15 @@ import (
 
 type WordApi struct{}
 
-//	@Summary		创建词条
-//	@Description	创建词条
-//	@Tags			词条
-//	@Accept			json
-//	@Produce		json
-//	@Param			Authorization	header		string					true	"token"
-//	@Param			word			body		systemReq.WordCreate	true	"word"
-//	@Success		200				{string}	string					"{"success":true,"data":{},"msg":"创建成功"}"
-//	@Router			/word/createWord [post]
+// @Summary		创建词条
+// @Description	创建词条
+// @Tags		词条
+// @Accept		json
+// @Produce		json
+// @Param		Authorization	header		string					true	"token"
+// @Param		word			body		systemReq.WordCreate	true	"word"
+// @Success		200				{string}	string					"{"success":true,"data":{},"msg":"创建成功"}"
+// @Router		/word/createWord [post]
 func (w *WordApi) CreateWord(c *gin.Context) {
 	var word systemReq.WordCreate
 	_ = c.ShouldBindJSON(&word)
@@ -37,15 +37,15 @@ func (w *WordApi) CreateWord(c *gin.Context) {
 	response.OkWithMessage("创建成功", c)
 }
 
-//	@Summary		编辑词条
-//	@Description	编辑词条
-//	@Tags			词条
-//	@Accept			json
-//	@Produce		json
-//	@Param			Authorization	header		string				true	"token"
-//	@Param			word			body		systemReq.WordEdit	true	"word"
-//	@Success		200				{string}	string				"{"success":true,"data":{},"msg":"编辑成功"}"
-//	@Router			/word/editWord [post]
+// @Summary		编辑词条
+// @Description	编辑词条
+// @Tags		词条
+// @Accept		json
+// @Produce		json
+// @Param		Authorization	header		string				true	"token"
+// @Param		word			body		systemReq.WordEdit	true	"word"
+// @Success		200				{string}	string				"{"success":true,"data":{},"msg":"编辑成功"}"
+// @Router		/word/editWord [post]
 func (w *WordApi) EditWord(c *gin.Context) {
 	var word systemReq.WordEdit
 	_ = c.ShouldBindJSON(&word)

@@ -1,0 +1,43 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "main": "dist-electron/main/index.js",
+  "debug": {
+    "env": {
+      "VITE_DEV_SERVER_URL": "http://127.0.0.1:7777/"
+    }
+  },
+  "scripts": {
+    "dev": "biome format ./src --write && vite",
+    "build": "biome format ./src --write && tsc && vite build && electron-builder",
+    "preview": "vite preview",
+    "pree2e": "vite build --mode=test",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.0.4",
+    "antd": "^5.9.1",
+    "electron-updater": "^6.1.4",
+    "unplugin-auto-import": "^0.16.6"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.1.2",
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "electron": "^25.8.1",
+    "electron-builder": "^24.6.4",
+    "eslint": "^8.49.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9",
+    "vite-plugin-electron": "^0.14.1",
+    "vite-plugin-electron-renderer": "^0.14.5"
+  }
+}
