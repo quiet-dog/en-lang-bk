@@ -69,7 +69,7 @@ export default defineConfig(({ command }) => {
       // Use Node.js API in the Renderer-process
       renderer(),
       AutoImport({
-        imports: ['react'],
+        imports: ['react', 'react-router-dom', 'react-router'],
         dts: './src/auto-imports.d.ts',
         dirs: ['src/layouts', 'src/views'],
         eslintrc: {

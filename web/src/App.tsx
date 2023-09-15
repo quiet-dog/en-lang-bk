@@ -1,8 +1,13 @@
+import { ConfigProvider } from "antd";
+
 function App() {
-	return <>
-		<div>
-		</div>
-	</>;
+	return (
+		<>
+			<ConfigProvider>
+				<Outlet />
+			</ConfigProvider>
+		</>
+	);
 }
 
 export default App;

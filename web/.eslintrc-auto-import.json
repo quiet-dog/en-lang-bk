@@ -19,6 +19,27 @@
     "useRef": true,
     "useState": true,
     "useSyncExternalStore": true,
-    "useTransition": true
+    "useTransition": true,
+    "Link": true,
+    "NavLink": true,
+    "Navigate": true,
+    "Outlet": true,
+    "Route": true,
+    "Routes": true,
+    "useHref": true,
+    "useInRouterContext": true,
+    "useLinkClickHandler": true,
+    "useLocation": true,
+    "useNavigate": true,
+    "useNavigationType": true,
+    "useOutlet": true,
+    "useOutletContext": true,
+    "useParams": true,
+    "useResolvedPath": true,
+    "useRoutes": true,
+    "useSearchParams": true,
+    "navigation": true,
+    "en-lang": true,
+    "en_lang": true
   }
 }
