@@ -40,6 +40,10 @@
     "useSearchParams": true,
     "navigation": true,
     "en-lang": true,
-    "en_lang": true
+    "en_lang": true,
+    "doc": true,
+    "Navigation": true,
+    "NavigationDOM": true,
+    "Common": true
   }
 }
