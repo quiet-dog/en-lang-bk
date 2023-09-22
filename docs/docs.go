@@ -16,6 +16,68 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/article/createArticle": {
+            "post": {
+                "description": "添加文章",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "文章"
+                ],
+                "summary": "添加文章",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ArticleCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/article/editArticle": {
+            "post": {
+                "description": "编辑文章",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "文章"
+                ],
+                "summary": "编辑文章",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ArticleEdit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"编辑成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/word/createWord": {
             "post": {
                 "description": "创建词条",
@@ -56,9 +118,86 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/word/editWord": {
+            "post": {
+                "description": "编辑词条",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "词条"
+                ],
+                "summary": "编辑词条",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "word",
+                        "name": "word",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.WordEdit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"编辑成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "request.ArticleCreate": {
+            "type": "object",
+            "required": [
+                "content"
+            ],
+            "properties": {
+                "content": {
+                    "description": "文章内容",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "标题",
+                    "type": "string"
+                }
+            }
+        },
+        "request.ArticleEdit": {
+            "type": "object",
+            "required": [
+                "content",
+                "id"
+            ],
+            "properties": {
+                "content": {
+                    "description": "文章内容",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "标题",
+                    "type": "string"
+                }
+            }
+        },
         "request.WordCreate": {
             "type": "object",
             "required": [
@@ -77,6 +216,31 @@ const docTemplate = `{
                 "extend": {
                     "description": "扩展批注内容",
                     "type": "string"
+                }
+            }
+        },
+        "request.WordEdit": {
+            "type": "object",
+            "required": [
+                "category",
+                "content",
+                "id"
+            ],
+            "properties": {
+                "category": {
+                    "description": "归类ID",
+                    "type": "integer"
+                },
+                "content": {
+                    "description": "原本单词",
+                    "type": "string"
+                },
+                "extend": {
+                    "description": "扩展批注内容",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         }

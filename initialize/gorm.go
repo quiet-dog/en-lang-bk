@@ -22,6 +22,10 @@ func RegisterTables(db *gorm.DB) {
 
 	db.AutoMigrate(
 		system.WordModel{},
+		system.MenuModel{},
+		system.CategoryModel{},
+		system.ArticleModel{},
+		system.SentenceModel{},
 	)
 
 	global.LOG.Info("register table success")
