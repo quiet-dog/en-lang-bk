@@ -3,7 +3,9 @@ import RGL, { WidthProvider, Responsive, Layout } from "react-grid-layout";
 import _ from "lodash";
 import { Props, State } from "./types";
 import "./index.css";
-import { Card } from "antd";
+import { Card, CardHeader } from "@nextui-org/card";
+import { Link} from "@nextui-org/link"
+
 export type CompactType = "horizontal" | "vertical" | null;
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -34,23 +36,10 @@ export class DragPable extends Component<Props, State> {
     return _.map(this.state.layouts.lg, function (l, i) {
       return (
         <div key={i}>
-          <Card
-            hoverable
-            style={{
-              height: "100%",
-              width: "100%",
-            }}
-          >
-            {l.static ? (
-              <span
-                className="text"
-                title="This item is static and cannot be removed or resized."
-              >
-                Static - {i}
-              </span>
-            ) : (
-              <span className="text">{i}</span>
-            )}
+          <Card style={{ width: "100%", height: "100%" }}>
+            <h1 className="text-2xl">title</h1>
+            <h3>描述信息</h3>
+            <Link href="#">链接地址</Link>
           </Card>
         </div>
       );
@@ -148,8 +137,10 @@ function generateLayout(resizeHandles: string[]): Layout[] {
   //     resizeHandles
   //   };
   // }) as Layout[];
+
   return [
-    { x: 1, y: 1, w: 1, h: 3, i: "0", static: false, resizeHandles },
-    { x: 2, y: 1, w: 10, h: 1, i: "1", static: false, resizeHandles },
+    { x: 1, y: 1, w: 8, h: 10, i: "0", static: false, resizeHandles },
+    { x: 9, y: 1, w: 8, h: 10, i: "1", static: false, resizeHandles },
+    { x: 17, y: 1, w: 8, h: 10, i: "2", static: false, resizeHandles },
   ] as Layout[];
 }

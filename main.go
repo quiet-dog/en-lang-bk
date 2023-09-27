@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+
 	global.VP = core.Viper()
 	global.LOG = core.InitLogger()
 	core.RunServer()

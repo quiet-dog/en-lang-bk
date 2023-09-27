@@ -1,1 +1,132 @@
-"use strict";const n=require("electron"),u=require("node:os"),r=require("node:path"),t=require("electron-updater");function w(a){t.autoUpdater.autoDownload=!1,t.autoUpdater.disableWebInstaller=!1,t.autoUpdater.allowDowngrade=!1,t.autoUpdater.on("checking-for-update",function(){}),t.autoUpdater.on("update-available",e=>{a.webContents.send("update-can-available",{update:!0,version:n.app.getVersion(),newVersion:e==null?void 0:e.version})}),t.autoUpdater.on("update-not-available",e=>{a.webContents.send("update-can-available",{update:!1,version:n.app.getVersion(),newVersion:e==null?void 0:e.version})}),n.ipcMain.handle("check-update",async()=>{if(!n.app.isPackaged){const e=new Error("The update feature is only available after the package.");return{message:e.message,error:e}}try{return await t.autoUpdater.checkForUpdatesAndNotify()}catch(e){return{message:"Network error",error:e}}}),n.ipcMain.handle("start-download",e=>{f((s,c)=>{s?e.sender.send("update-error",{message:s.message,error:s}):e.sender.send("download-progress",c)},()=>{e.sender.send("update-downloaded")})}),n.ipcMain.handle("quit-and-install",()=>{t.autoUpdater.quitAndInstall(!1,!0)})}function f(a,e){t.autoUpdater.on("download-progress",s=>a(null,s)),t.autoUpdater.on("error",s=>a(s,null)),t.autoUpdater.on("update-downloaded",e),t.autoUpdater.downloadUpdate()}process.env.DIST_ELECTRON=r.join(__dirname,"../");process.env.DIST=r.join(process.env.DIST_ELECTRON,"../dist");process.env.VITE_PUBLIC=process.env.VITE_DEV_SERVER_URL?r.join(process.env.DIST_ELECTRON,"../public"):process.env.DIST;u.release().startsWith("6.1")&&n.app.disableHardwareAcceleration();process.platform==="win32"&&n.app.setAppUserModelId(n.app.getName());n.app.requestSingleInstanceLock()||(n.app.quit(),process.exit(0));let o=null;const d=r.join(__dirname,"../preload/index.js"),i=process.env.VITE_DEV_SERVER_URL,l=r.join(process.env.DIST,"index.html");async function p(){o=new n.BrowserWindow({title:"Main window",icon:r.join(process.env.VITE_PUBLIC,"favicon.ico"),webPreferences:{preload:d,nodeIntegration:!0,contextIsolation:!1}}),i?(o.loadURL(i),o.webContents.openDevTools()):o.loadFile(l),o.webContents.on("did-finish-load",()=>{o==null||o.webContents.send("main-process-message",new Date().toLocaleString())}),o.webContents.setWindowOpenHandler(({url:a})=>(a.startsWith("https:")&&n.shell.openExternal(a),{action:"deny"})),w(o)}n.app.whenReady().then(p);n.app.on("window-all-closed",()=>{o=null,process.platform!=="darwin"&&n.app.quit()});n.app.on("second-instance",()=>{o&&(o.isMinimized()&&o.restore(),o.focus())});n.app.on("activate",()=>{const a=n.BrowserWindow.getAllWindows();a.length?a[0].focus():p()});n.ipcMain.handle("open-win",(a,e)=>{const s=new n.BrowserWindow({webPreferences:{preload:d,nodeIntegration:!0,contextIsolation:!1}});process.env.VITE_DEV_SERVER_URL?s.loadURL(`${i}#${e}`):s.loadFile(l,{hash:e})});
+"use strict";
+const electron = require("electron");
+const node_os = require("node:os");
+const node_path = require("node:path");
+const electronUpdater = require("electron-updater");
+function update(win2) {
+  electronUpdater.autoUpdater.autoDownload = false;
+  electronUpdater.autoUpdater.disableWebInstaller = false;
+  electronUpdater.autoUpdater.allowDowngrade = false;
+  electronUpdater.autoUpdater.on("checking-for-update", function() {
+  });
+  electronUpdater.autoUpdater.on("update-available", (arg) => {
+    win2.webContents.send("update-can-available", { update: true, version: electron.app.getVersion(), newVersion: arg == null ? void 0 : arg.version });
+  });
+  electronUpdater.autoUpdater.on("update-not-available", (arg) => {
+    win2.webContents.send("update-can-available", { update: false, version: electron.app.getVersion(), newVersion: arg == null ? void 0 : arg.version });
+  });
+  electron.ipcMain.handle("check-update", async () => {
+    if (!electron.app.isPackaged) {
+      const error = new Error("The update feature is only available after the package.");
+      return { message: error.message, error };
+    }
+    try {
+      return await electronUpdater.autoUpdater.checkForUpdatesAndNotify();
+    } catch (error) {
+      return { message: "Network error", error };
+    }
+  });
+  electron.ipcMain.handle("start-download", (event) => {
+    startDownload(
+      (error, progressInfo) => {
+        if (error) {
+          event.sender.send("update-error", { message: error.message, error });
+        } else {
+          event.sender.send("download-progress", progressInfo);
+        }
+      },
+      () => {
+        event.sender.send("update-downloaded");
+      }
+    );
+  });
+  electron.ipcMain.handle("quit-and-install", () => {
+    electronUpdater.autoUpdater.quitAndInstall(false, true);
+  });
+}
+function startDownload(callback, complete) {
+  electronUpdater.autoUpdater.on("download-progress", (info) => callback(null, info));
+  electronUpdater.autoUpdater.on("error", (error) => callback(error, null));
+  electronUpdater.autoUpdater.on("update-downloaded", complete);
+  electronUpdater.autoUpdater.downloadUpdate();
+}
+process.env.DIST_ELECTRON = node_path.join(__dirname, "../");
+process.env.DIST = node_path.join(process.env.DIST_ELECTRON, "../dist");
+process.env.VITE_PUBLIC = process.env.VITE_DEV_SERVER_URL ? node_path.join(process.env.DIST_ELECTRON, "../public") : process.env.DIST;
+if (node_os.release().startsWith("6.1"))
+  electron.app.disableHardwareAcceleration();
+if (process.platform === "win32")
+  electron.app.setAppUserModelId(electron.app.getName());
+if (!electron.app.requestSingleInstanceLock()) {
+  electron.app.quit();
+  process.exit(0);
+}
+let win = null;
+const preload = node_path.join(__dirname, "../preload/index.js");
+const url = process.env.VITE_DEV_SERVER_URL;
+const indexHtml = node_path.join(process.env.DIST, "index.html");
+async function createWindow() {
+  win = new electron.BrowserWindow({
+    title: "Main window",
+    icon: node_path.join(process.env.VITE_PUBLIC, "favicon.ico"),
+    webPreferences: {
+      preload,
+      // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
+      // Consider using contextBridge.exposeInMainWorld
+      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  });
+  if (url) {
+    win.loadURL(url);
+    win.webContents.openDevTools();
+  } else {
+    win.loadFile(indexHtml);
+  }
+  win.webContents.on("did-finish-load", () => {
+    win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
+  });
+  win.webContents.setWindowOpenHandler(({ url: url2 }) => {
+    if (url2.startsWith("https:"))
+      electron.shell.openExternal(url2);
+    return { action: "deny" };
+  });
+  update(win);
+}
+electron.app.whenReady().then(createWindow);
+electron.app.on("window-all-closed", () => {
+  win = null;
+  if (process.platform !== "darwin")
+    electron.app.quit();
+});
+electron.app.on("second-instance", () => {
+  if (win) {
+    if (win.isMinimized())
+      win.restore();
+    win.focus();
+  }
+});
+electron.app.on("activate", () => {
+  const allWindows = electron.BrowserWindow.getAllWindows();
+  if (allWindows.length) {
+    allWindows[0].focus();
+  } else {
+    createWindow();
+  }
+});
+electron.ipcMain.handle("open-win", (_, arg) => {
+  const childWindow = new electron.BrowserWindow({
+    webPreferences: {
+      preload,
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  });
+  if (process.env.VITE_DEV_SERVER_URL) {
+    childWindow.loadURL(`${url}#${arg}`);
+  } else {
+    childWindow.loadFile(indexHtml, { hash: arg });
+  }
+});
+//# sourceMappingURL=index.js.map
